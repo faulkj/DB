@@ -38,9 +38,9 @@
 
       public function __get($item) {
          try {
-            $field = new ReflectionProperty(get_class($this), $item);
+            $field = new \ReflectionProperty(get_class($this), $item);
          }
-         catch(Exception $e) {
+         catch(\Exception $e) {
             trigger_error("'$item' is not a valid property", E_USER_ERROR);
          }
          if($field->isPrivate()) trigger_error("That's private", E_USER_ERROR);
@@ -258,7 +258,7 @@
                   if(!in_array($error['message'], $dbg)) array_push($dbg, $error['message']);
                }
             }
-            $this->debug("$lbl:\n          \\" . implode($dbg, "\n\n"), "close");
+            $this->debug("$lbl:\n          \\" . implode((array) $dbg, "\n\n"), "close");
             return $this->error;
          }
       }
