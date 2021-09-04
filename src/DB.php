@@ -1,6 +1,6 @@
 <?php namespace FaulkJ\DB;
    /*
-    * DB Control Class for SQLSRV v1.5
+    * DB Control Class for SQLSRV v1.5.1
     *
     * Kopimi 2021 Joshua Faulkenberry
     * Unlicensed under The Unlicense
@@ -9,7 +9,7 @@
 
    class DB {
 
-      const     version      = "1.5";
+      const     version      = "1.5.1";
 
       protected $server      = null;
       protected $client      = null;
