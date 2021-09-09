@@ -21,7 +21,7 @@
       public function __get($prop) {
          if(property_exists($this, $prop)) return $this->$prop;
          if(array_key_exists($prop, $this->_data)) return $this->_data[$prop];
-         else throw new Exception("'$prop' does not exist");
+         else throw new \Exception("'$prop' does not exist");
       }
 
       public function __isset($prop) {
@@ -29,7 +29,7 @@
       }
 
       public function __set($prop, $value) {
-         throw new Exception("Can't modify a response");
+         throw new \Exception("Can't modify a response");
       }
    }
 
