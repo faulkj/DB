@@ -243,7 +243,7 @@
 
       private function checkErrors($lbl, $sql = null) {
          if(is_array(sqlsrv_errors()) && ($errors = array_filter(sqlsrv_errors(), function($obj) {
-            static $idList = array();
+            static $idList = [];
             if(in_array(json_encode($obj), $idList)) return false;
             $idList[] = json_encode($obj);
             return true;
@@ -258,7 +258,7 @@
                   if(!in_array($error['message'], $dbg)) array_push($dbg, $error['message']);
                }
             }
-            $this->debug("$lbl:\n          \\" . implode((array) $dbg, "\n\n"), "close");
+            $this->debug("$lbl:\n          \\" . implode("\n\n", (array) $dbg), "close");
             return $this->error;
          }
       }
