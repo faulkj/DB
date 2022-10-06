@@ -1,15 +1,15 @@
-<?php namespace FaulkJ\DB;
+<?php namespace FaulkJ;
    /*
-    * DB Control Class for SQLSRV v1.5.1
+    * DB Control Class for SQLSRV v1.6
     *
-    * Kopimi 2021 Joshua Faulkenberry
+    * Kopimi 2022 Joshua Faulkenberry
     * Unlicensed under The Unlicense
     * http://unlicense.org/
     */
 
    class DB {
 
-      const     version      = "1.5.1";
+      const     version      = "1.6";
 
       protected $server      = null;
       protected $client      = null;
@@ -118,13 +118,13 @@
                $fail = true;
             }
 
-            return new Response($fail, $results, $affected, $err);
+            return new DB\Response($fail, $results, $affected, $err);
          };
 
          if($this->transactive && $this->error !== null) $this->transfail = true;
-         if($this->transfail) return new Response(true, null, null, array_merge(["Transaction Failed"], $this->error));
+         if($this->transfail) return new DB\Response(true, null, null, array_merge(["Transaction Failed"], $this->error));
          if(!$this->connection) $this->connect(false);
-         if(!$this->connection) return new Response(true, null, null, "Unable to establish connection to SQL server.");
+         if(!$this->connection) return new DB\Response(true, null, null, "Unable to establish connection to SQL server.");
          $dbq->bindTo($this);
          if(!is_array($this->sql)) $this->sql = array();
          $sql = (array) $sql;
@@ -132,7 +132,7 @@
          foreach($sql as $qs) {
             $out = $dbq($qs, $singleRow, $singleCol);
             if($out->success) array_push($list, $out);
-            else return new Response(true, null, null, array_merge((array) $this->error, count($sql) <= 1 ? [] : ["All previous queries executed successfully."]));
+            else return new DB\Response(true, null, null, array_merge((array) $this->error, count($sql) <= 1 ? [] : ["All previous queries executed successfully."]));
          }
          if(!$this->transactive && !$this->persist) $this->close();
 

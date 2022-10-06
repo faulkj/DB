@@ -1,4 +1,4 @@
-<?php 
+<?php
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -11,9 +11,9 @@ use PHPUnit\Framework\TestCase;
 */
 class DBTest extends TestCase
 {
-	
+
   /**
-  * Just check if the YourClass has no syntax error 
+  * Just check if the YourClass has no syntax error
   *
   * This is just a simple check to make sure your library has no syntax error. This helps you troubleshoot
   * any typo before you even use this library in a real project.
@@ -21,13 +21,13 @@ class DBTest extends TestCase
   */
   public function testIsThereAnySyntaxError()
   {
-	$var = new FaulkJ\DB\DB("testhost", "testdb", "testuser", "testpass");
+	$var = new FaulkJ\DB("testhost", "testdb", "testuser", "testpass");
 	$this->assertTrue(is_object($var));
 	unset($var);
   }
-  
+
   /**
-  * Just check if the YourClass has no syntax error 
+  * Just check if the YourClass has no syntax error
   *
   * This is just a simple check to make sure your library has no syntax error. This helps you troubleshoot
   * any typo before you even use this library in a real project.
@@ -35,8 +35,8 @@ class DBTest extends TestCase
   */
   public function testSanitizer()
   {
-	$var = new FaulkJ\DB\DB("testhost", "testdb", "testuser", "testpass");
+	$var = new FaulkJ\DB("testhost", "testdb", "testuser", "testpass");
 	$this->assertTrue($var->sanitize("'Test'") == "''Test''");
 	unset($var);
-  } 
+  }
 }
