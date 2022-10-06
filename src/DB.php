@@ -28,7 +28,7 @@
       private   $password;
       private   $connection;
 
-      public function __construct($host, $db, $user, $password) {
+      public function __construct(string $host, string $db, string $user, string $password) {
          foreach(get_defined_vars() as $k => $v) if(!$v) trigger_error("Undefined $k", E_USER_ERROR);
          $this->host     = $host;
          $this->db       = $db;
@@ -78,7 +78,7 @@
          return false;
       }
 
-      public function query($sql, $singleRow = false, $singleCol = false) {
+      public function query(string $sql, bool $singleRow = false, bool $singleCol = false) {
          $dbq = function($sql, $singleRow, $singleCol) {
             $fail     = false;
             $affected = -1;
@@ -151,7 +151,7 @@
          return count($list) == 1 ? $list[0] : $list;
       }
 
-      public function transaction($action = "begin") {
+      public function transaction(string $action = "begin") {
          switch($action) {
             default:
             case "begin":
@@ -199,7 +199,7 @@
          return true;
       }
 
-      public function transact($queries) {
+      public function transact(array $queries) {
          if($queries && count($queries) && $this->transaction("begin")) {
             $this->query($queries);
             if($this->error !== null) {
@@ -211,11 +211,11 @@
          else return false;
       }
 
-      public function q($sql, $singleRow = false, $singleCol = false) {
+      public function q(string $sql, bool $singleRow = false, bool $singleCol = false) {
          return $this->query($sql, $singleRow, $singleCol);
       }
 
-      public function t($action = "begin") {
+      public function t(string $action = "begin") {
          return $this->transaction($action);
       }
 
