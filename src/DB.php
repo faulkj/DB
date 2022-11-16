@@ -78,7 +78,7 @@
          return false;
       }
 
-      public function query(string $sql, bool $singleRow = false, bool $singleCol = false) {
+      public function query($sql, bool $singleRow = false, bool $singleCol = false) {
          $dbq = function($sql, $singleRow, $singleCol) {
             $fail     = false;
             $affected = -1;
@@ -97,7 +97,7 @@
                   else $results = sqlsrv_fetch_object($stmt);
                }
                else {
-                  $results = array();
+                  $results = [];
                   while($obj = sqlsrv_fetch_object($stmt)) {
                      if($singleCol) {
                         foreach($obj as $a) {
@@ -209,14 +209,6 @@
             else return $this->transaction("commit");
          }
          else return false;
-      }
-
-      public function q(string $sql, bool $singleRow = false, bool $singleCol = false) {
-         return $this->query($sql, $singleRow, $singleCol);
-      }
-
-      public function t(string $action = "begin") {
-         return $this->transaction($action);
       }
 
       public function debug($on = true, $andthen = null) {
