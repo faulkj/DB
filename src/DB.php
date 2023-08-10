@@ -1,15 +1,15 @@
 <?php namespace FaulkJ;
    /*
-    * DB Control Class for SQLSRV v1.6
+    * DB Control Class for SQLSRV v1.7
     *
-    * Kopimi 2022 Joshua Faulkenberry
+    * Kopimi 2023 Joshua Faulkenberry
     * Unlicensed under The Unlicense
     * http://unlicense.org/
     */
 
    class DB {
 
-      const     version      = "1.6";
+      const     version      = "1.7";
 
       protected $server      = null;
       protected $client      = null;
@@ -78,39 +78,44 @@
          return false;
       }
 
-      public function query($sql, bool $singleRow = false, bool $singleCol = false) {
-         $dbq = function($sql, $singleRow, $singleCol) {
+      public function query($sql, bool $singleRow = false, bool $singleCol = false, $singleSet = false) {
+         $dbq = function($sql, $singleRow, $singleCol, $singleSet) {
             $fail     = false;
             $affected = -1;
-            $results  = null;
+            $results  = [];
             $err      = null;
 
             array_push($this->sql, $sql);
             $this->debug("Query...\n" . str_replace("<", "&lt;", $sql));
-            $stmt = sqlsrv_query($this->connection, $sql);
-            if($stmt) {
-               if(is_bool($singleRow) && $singleRow) {
-                  if($singleCol) {
-                     $col = sqlsrv_fetch_array($stmt);
-                     $results = isset($col[0]) ? $col[0] : null;
-                  }
-                  else $results = sqlsrv_fetch_object($stmt);
-               }
-               else {
-                  $results = [];
-                  while($obj = sqlsrv_fetch_object($stmt)) {
+            if($stmt = sqlsrv_query($this->connection, $sql)) {
+               do {
+                  if($singleRow === true) {
                      if($singleCol) {
-                        foreach($obj as $a) {
-                           if(is_string($singleRow) && isset($obj->$singleRow)) $results[$obj->$singleRow] = $a;
-                           else array_push($results, $a);
+                        $col = sqlsrv_fetch_array($stmt);
+                        $results[] = isset($col[0]) ? $col[0] : null;
+                     }
+                     else $results[] = sqlsrv_fetch_object($stmt);
+                  }
+                  else {
+                     $subResults = [];
+                     while($obj = sqlsrv_fetch_object($stmt)) {
+                        if($singleCol) {
+                           foreach($obj as $a) {
+                              if(is_string($singleRow) && isset($obj->$singleRow)) $subResults[$obj->$singleRow] = $a;
+                              else $subResults[] = $a;
+                           }
+                        }
+                        else {
+                           if(is_string($singleRow) && isset($obj->$singleRow)) $subResults[$obj->$singleRow] = $obj;
+                           else $subResults[] = $obj;
                         }
                      }
-                     else {
-                        if(is_string($singleRow) && isset($obj->$singleRow)) $results[$obj->$singleRow] = $obj;
-                        else array_push($results, $obj);
-                     }
+                     $results[] = $subResults;
                   }
-               }
+               } while (sqlsrv_next_result($stmt));
+               if($singleSet) $results = $results[count($results) - 1];
+               if(is_array($results) && count($results) == 1) $results = $results[0];
+
                $affected = sqlsrv_rows_affected($stmt);
             }
             else {
@@ -126,12 +131,12 @@
          if(!$this->connection) $this->connect(false);
          if(!$this->connection) return new DB\Response(true, null, null, "Unable to establish connection to SQL server.");
          $dbq->bindTo($this);
-         if(!is_array($this->sql)) $this->sql = array();
+         if(!is_array($this->sql)) $this->sql = [];
          $sql = (array) $sql;
-         $list = array();
+         $list = [];
          foreach($sql as $qs) {
-            $out = $dbq($qs, $singleRow, $singleCol);
-            if($out->success) array_push($list, $out);
+            $out = $dbq($qs, $singleRow, $singleCol, $singleSet);
+            if($out->success) $list[] = $out;
             else return new DB\Response(true, null, null, array_merge((array) $this->error, count($sql) <= 1 ? [] : ["All previous queries executed successfully."]));
          }
          if(!$this->transactive && !$this->persist) $this->close();
@@ -265,5 +270,4 @@
          return $inp;
       }
    }
-
 ?>
