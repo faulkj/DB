@@ -1,8 +1,8 @@
 <?php namespace FaulkJ\DB;
    /*
-    * DB Response Class for SQLSRV v1.6
+    * DB Response Class for SQLSRV v1.7
     *
-    * Kopimi 2022 Joshua Faulkenberry
+    * Kopimi 2023 Joshua Faulkenberry
     * Unlicensed under The Unlicense
     * http://unlicense.org/
     */

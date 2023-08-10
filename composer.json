@@ -1,6 +1,7 @@
 {
    "name" : "faulkj/db",
    "description" : "A wrapper class for SQLSRV (MS SQL) in PHP.",
+   "homepage" : "https://github.com/faulkj/DB/",
    "authors" : [{
          "name" : "Joshua Faulkenberry",
          "email" : "j@joshuafaulkenberry.com",
@@ -25,6 +26,5 @@
       "classmap": [
          "src/"
       ]
-   },
-   "homepage" : "https://github.com/faulkj/DB/"
+   }
 }

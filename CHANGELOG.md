@@ -1,5 +1,9 @@
 # DB Changelog
 
+[2023-08-09] Version 1.7
+   - Update to handle multiple result sets from a single query call
+   - Cleanup
+
 [2022-11-16] Version 1.6.1
    - Fixed query method to correctly accept array of queries
    - Cleanup
