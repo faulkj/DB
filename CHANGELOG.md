@@ -1,5 +1,11 @@
 # DB Changelog
 
+Version 1.8 ***2024-03-02***
+   - Stricter typings
+   - Set ReturnDatesAsStrings to true by default
+   - Added options argument to connect method to override defaults
+   - New pQuery method to support prepared statements
+
 Version 1.7 ***2023-08-09***
    - Update to handle multiple result sets from a single query call
    - Cleanup

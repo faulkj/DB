@@ -8,7 +8,31 @@ use FaulkJ\DB;
 
 $db = new DB("myhost", "mydb", "username", "password");
 
-$data = $db->query("SELECT * FROM mytable");
-if(!$data->success) echo(implode("\n", $data->error));
-else echo(json_encode($data->result));
+$respose = $db->query("SELECT * FROM mytable");
+if(!$respose->success) echo(implode("\n", $respose->error));
+else echo(json_encode($respose->result));
+
+
+$params = [
+   "apples",
+   "oranges",
+   12.34,
+   5,
+   true,
+   null,
+   321
+];
+
+if($dp->pQuery("
+   UPDATE mytable
+      SET favorite = ?
+      , leastFavorite = ?
+      , cost = ?,
+      , count = ?
+      , active = ?
+      , nullable = ?
+      WHERE id = ?
+", $params)->success) {
+   echo "Table updated";
+ }
 ```
